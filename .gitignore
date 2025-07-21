@@ -1,5 +1,5 @@
-./contact/.env
-./contact/node_modules/
-./contact/
+./contract/.env
+./contract/node_modules/
+./contract/
 
 ./unige-coin/node_modules
