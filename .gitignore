@@ -1,0 +1,5 @@
+./contact/.env
+./contact/node_modules/
+./contact/
+
+./unige-coin/node_modules
