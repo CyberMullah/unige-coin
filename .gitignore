@@ -1,5 +1,6 @@
-./contract/.env
-./contract/node_modules/
-./contract/
+/contract/.env
+/contract/node_modules
 
-./unige-coin/node_modules
+/backend/.env
+/backend/node_modules
+/unige-coin/node_modules
