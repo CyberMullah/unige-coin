@@ -12,4 +12,8 @@ contract UniGeCoin is ERC20, Ownable {
     function reward(address to, uint256 amount) external onlyOwner {
         _mint(to, amount * 10 ** decimals());
     }
+
+    function burn(address from, uint256 amount) external onlyOwner {
+        _burn(from, amount * 10 ** decimals());
+    }
 }

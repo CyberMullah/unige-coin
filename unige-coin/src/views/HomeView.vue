@@ -83,7 +83,7 @@ import { ref } from 'vue'
 import { ethers } from 'ethers'
 
 // Replace with your deployed contract address
-const CYM_ADDRESS = '0x13dC4Ce1b74B8B860e35068FcDfCD8d7172D07E1'
+const CYM_ADDRESS = '0x6948c6b52111d1747e14ba484291c9Ed28840b91'
 
 const CYM_ABI = [
   'function balanceOf(address) view returns (uint256)',
