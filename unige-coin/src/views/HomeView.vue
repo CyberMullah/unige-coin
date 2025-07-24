@@ -88,7 +88,7 @@ const CYM_ADDRESS = '0x6948c6b52111d1747e14ba484291c9Ed28840b91'
 const CYM_ABI = [
   'function balanceOf(address) view returns (uint256)',
   'function decimals() view returns (uint8)',
-  'function reward(address to, uint256 amount) external',
+  "event Transfer(address indexed from, address indexed to, uint256 value)"
 ]
 
 // Questions array
@@ -134,6 +134,7 @@ async function connectWallet() {
   contract = new ethers.Contract(CYM_ADDRESS, CYM_ABI, signer)
 
   await loadBalance()
+  await watchBalanceChanges()
 }
 
 async function loadBalance() {
@@ -150,8 +151,15 @@ async function submitAnswer() {
   if (isCorrect.value) {
     feedback.value = '✅ Correct! You earned 100 UGC!'
     try {
-      const tx = await contract.reward(address.value, 100)
-      await tx.wait()
+      
+      await fetch("http://localhost:8000/api/reward", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wallet: address.value
+        })
+      })
+
       await loadBalance()
     } catch (err) {
       feedback.value = '⚠️ Error while rewarding: ' + err.message
@@ -159,6 +167,22 @@ async function submitAnswer() {
   } else {
     feedback.value = '❌ Incorrect. No reward for this one.'
   }
+}
+
+async function watchBalanceChanges() {
+  if (!contract || !address.value) return
+
+  contract.on("Transfer", async (from, to, value, event) => {
+    const addr = address.value.toLowerCase()
+
+    // If this user is involved in the transfer
+    if (from.toLowerCase() === addr || to.toLowerCase() === addr) {
+      await loadBalance()
+      console.log(`🔁 Balance updated due to Transfer: ${from} → ${to}`)
+    }
+  })
+
+  console.log("👂 Listening for Transfer events to update balance")
 }
 
 function nextQuestion() {
